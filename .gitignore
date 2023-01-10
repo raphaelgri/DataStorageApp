@@ -11,3 +11,5 @@ Data/ml-25m-README.html
 Data/ml-25m.zip
 Data/movie - Copia.db
 Web
+.ipynb_checkpoints/ReadData-checkpoint.ipynb
+.ipynb_checkpoints/LoadData-checkpoint.ipynb

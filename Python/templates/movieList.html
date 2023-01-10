@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block PageTitle %}<h1>Home</h1>{% endblock %}
+{% block content %}
+    <h1>MovieDB.io</h1>
+    <p class="important">
+      Welcome to MovieDB.io
+    </p>
+    <table class="resultTable">
+      <tr>
+        <th>Movie Title</th>
+      </tr>
+    {% for movie in movielist %}
+      <tr>
+        <td>{{ movie }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+    <div class="PageNavigation">
+        <a href="{{previous}}" class="NavButton"> Previous Page </a>
+        <a href="{{next}}" class="NavButton"> Next Page </a>
+    </div>
+{% endblock %}

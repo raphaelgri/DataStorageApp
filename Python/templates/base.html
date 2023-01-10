@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
+    <title>{% block title %}{% endblock %} - MovieDB.io</title>
+    {% endblock %}
+</head>
+<body>
+    <ul>
+        <li><a href="/MovieDB.io/home">Home</a></li>
+        <li><a href="/MovieDB.io/movieList/0">Movie List</a></li>
+        <li><a href="/MovieDB.io/movieRanking">Movie Ranking</a></li>
+        <li><a href="/MovieDB.io/userList">User List</a></li>
+    </ul>
+    <div id="content">
+        {% block PageTitle %}
+        {% endblock %}
+        <div class="SearchArea">
+            <form>
+                <select name="lsize" id="lsize" class="NavButton">\n
+                    <option value="10">10</option>\n
+                    <option value="25">25</option>\n
+                    <option value="50">50</option>\n
+                    <option value="100">100</option>\n
+                </select>
+                <input type="text" placeholder="Search.." name="searchBar" class="SearchBar" id="searchBar">
+                <input type="submit" value="Search" class="NavButton">
+            </form>
+        </div>
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2008 by<a href="http://domain.invalid/">Raphael Griffo Duarte</a>.
+        {% endblock %}
+    </div>
+</body>
+</html>

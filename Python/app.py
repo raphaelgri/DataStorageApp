@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, url_for, redirect
+
+import urllib.parse #for decoding URL
 
 #============== SQLALCHEMY ==============
 
@@ -52,28 +54,56 @@ class GenreList(Base):
 
 #============== FLASK ==============
 
+# Set the secret key to some random bytes. Keep this really secret!
+
+
 app = Flask(__name__)
 
-@app.route("/<page>")
-def hello_world(page):
-    
-    #connects to the database
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    i = int(page)
-    html = "<p>Hello, World!</p>"
-    html = "<p>Movies from " + str(1+30*i) + " to " + str(30+30*i) + "</p>"
-    previous = "<a href="+str(i-1)+">Previous Page</a>"
-    next =  "<a href="+str(i+1)+">Next Page</a>"
-    if(i > 0): links = previous+next
-    else: links = next
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-    
-    for m in session.query(Movies).order_by(Movies.id_movie)[1+30*i:30+30*i]:
-        html = html + '<p>' + m.title_movie + '</p>\n'
-        
-    html = html + links
-    return html
+#REDIRECT TO HOME
+@app.route("/",)
+def index():
+    return redirect(url_for('home'))
+
+#MAIN HOME PAGE
+@app.route("/MovieDB.io/home", methods=['GET', 'POST'])
+def home():
+    return render_template('home.html')
+
+#SHOWS A SIMPLE LIST OF MOVIES
+@app.route("/MovieDB.io/movieList/<page>", methods=['GET', 'POST'])
+def movieList(page=0):
+    search="" #search term
+    lsize=10 #list of elements per page
+    args = request.args
+    if(args):
+        lsize = int(request.args['lsize'])
+        search = request.args['searchBar']
+        reset = request.args.get("reset")
+        if(reset is None): #reset page in case of new search
+            return redirect(url_for('.movieList', page=0, lsize=lsize,searchBar=search, reset='no'))
+    print(args)
+
+    movies = [] #list of movies
+
+    i = int(page) #convert page to integer
+
+    Session = sessionmaker(bind=engine) #session for SQAlchemy
+    SQAsession = Session() #session for SQAlchemy
+
+    #executing the query for the movie list (create a separate function later!!!)
+    if(search):
+        for m in SQAsession.query(Movies).filter(Movies.title_movie.like("%"+search+"%")).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
+            movies.append(m.title_movie)
+    else:
+        for m in SQAsession.query(Movies).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
+            movies.append(m.title_movie)
+
+    next=url_for('.movieList', page=i+1, lsize=lsize,searchBar=search, reset='no')
+    previous=url_for('.movieList', page=i-1,lsize=lsize,searchBar=search, reset='no')
+
+    return render_template('movieList.html', movielist=movies, previous=previous, next=next, max=100)
 
 if __name__ == '__main__':
     app.run(debug=True)

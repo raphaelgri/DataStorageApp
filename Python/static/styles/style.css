@@ -41,7 +41,10 @@ ul {
     margin: auto;
     width: 75%;
     padding: 10px;
-    background-image: url('images/search.svg');
+    background-image: url('../images/search.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right;
   }
 
   .resultTable{

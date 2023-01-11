@@ -26,6 +26,7 @@ def home():
 #SHOWS A SIMPLE LIST OF MOVIES
 @app.route("/MovieDB.io/movieList/<page>", methods=['GET', 'POST'])
 def movieList(page=0):
+    
     search="" #search term
     lsize=10 #list of elements per page
     args = request.args
@@ -44,17 +45,18 @@ def movieList(page=0):
     i = int(page) #convert page to integer
 
     #executing the query for the movie list (create a separate function later!!!)
-    if(search):
-        term = "%".join(search.split()) #searches in a more flexible way
-        for m in SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
-            movies.append(m[0])
-            years.append(m[1])
-            ratings.append(round(m[2],1))
-    else:
-        for m in SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
-            movies.append(m[0])
-            years.append(m[1])
-            ratings.append(round(m[2],1))
+    with dataSession() as SQAsession:
+        if(search):
+            term = "%".join(search.split()) #searches in a more flexible way
+            for m in SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
+                movies.append(m[0])
+                years.append(m[1])
+                ratings.append(round(m[2],1))
+        else:
+            for m in SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
+                movies.append(m[0])
+                years.append(m[1])
+                ratings.append(round(m[2],1))
 
     next=url_for('.movieList', page=i+1, lsize=lsize,searchBar=search, reset='no')
     previous=url_for('.movieList', page=i-1,lsize=lsize,searchBar=search, reset='no')

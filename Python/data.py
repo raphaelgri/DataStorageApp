@@ -61,5 +61,7 @@ class ReferenceRatings(Base):
     def __repr__(self):
         return "<Rating(id_movie='%i',average_rating='%i',timestamp_update='%s')>" % (self.id_movie,self.average_rating, self.timestamp_update)
 
-Session = sessionmaker(bind=engine) #session for SQAlchemy
-SQAsession = Session() #session for SQAlchemy
+def dataSession():
+    Session = sessionmaker(bind=engine) #session for SQAlchemy
+    SQAsession = Session() #session for SQAlchemy
+    return SQAsession

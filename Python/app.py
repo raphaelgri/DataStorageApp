@@ -124,9 +124,14 @@ def movieList(page=0):
     next=url_for('.movieList', page=i+1, lsize=lsize,searchBar=search, reset='no')
     previous=url_for('.movieList', page=i-1,lsize=lsize,searchBar=search, reset='no')
 
+    if(len(movies) < lsize):
+        maxflag=1 #limits navigation in the list
+    else:
+        maxflag=0 #limits navigation in the list
+
     movies=zip(movies, years, ratings) #put all information into one variable for the template
 
-    return render_template('movieList.html', movielist=movies, previous=previous, next=next, max=100)
+    return render_template('movieList.html', movielist=movies, previous=previous, next=next, max=maxflag, page=i)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000,debug=True)

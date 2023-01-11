@@ -67,7 +67,11 @@
     {% endfor %}
     </table>
     <div class="PageNavigation">
-        <a href="{{previous}}" class="NavButton"> Previous Page </a>
-        <a href="{{next}}" class="NavButton"> Next Page </a>
+        {% if page > 0 %}
+          <a href="{{previous}}" class="NavButton"> Previous Page </a>
+        {% endif %}
+        {% if max == 0 %}
+          <a href="{{next}}" class="NavButton"> Next Page </a>
+        {% endif %}
     </div>
 {% endblock %}

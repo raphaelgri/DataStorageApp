@@ -18,7 +18,7 @@
         {% endblock %}
         <div class="SearchArea">
             <form>
-                <select name="lsize" id="lsize" class="NavButton">\n
+                <select name="lsize" id="lsize" class="NavButton" aria-placeholder="Result Size">\n
                     <option value="10">10</option>\n
                     <option value="25">25</option>\n
                     <option value="50">50</option>\n
@@ -31,10 +31,12 @@
         {% block content %}
         {% endblock %}
     </div>
-    <div id="footer">
-        {% block footer %}
-        &copy; Copyright 2008 by<a href="http://domain.invalid/">Raphael Griffo Duarte</a>.
-        {% endblock %}
-    </div>
 </body>
+
+<div id="footer" class="footer">
+    {% block footer %}
+    &copy; Copyright 2008 by<a href="http://domain.invalid/">Raphael Griffo Duarte</a>.
+    {% endblock %}
+</div>
+
 </html>

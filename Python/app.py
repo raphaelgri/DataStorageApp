@@ -21,7 +21,7 @@ class Movies(Base):
     
     id_movie = sqa.Column(sqa.Integer, primary_key=True)
     title_movie = sqa.Column(sqa.String)
-    
+    year_movie = sqa.Column(sqa.Integer)
     
     def __repr__(self):
         return "<Movie(id_movie='%i',title_movie='%s')>" % (self.id_movie, self.title_movie)
@@ -51,6 +51,20 @@ class GenreList(Base):
     
     def __repr__(self):
         return "<GenreList(id_genre_item='%i',id_movie='%i',name_genre='%s')>" % (self.id_genre_item,self.id_movie,self.id_user,self.name_genre)
+
+    
+#creates class temporary reference of average rating
+class ReferenceRatings(Base):
+    __tablename__ = 'reference_ratings'
+    
+    id_reference = sqa.Column(sqa.Integer, primary_key=True)
+    average_rating = sqa.Column(sqa.Float)
+    timestamp_update = sqa.Column(sqa.String)
+
+    
+    def __repr__(self):
+        return "<Rating(id_movie='%i',average_rating='%i',timestamp_update='%s')>" % (self.id_movie,self.average_rating, self.timestamp_update)
+
 
 #============== FLASK ==============
 
@@ -86,6 +100,8 @@ def movieList(page=0):
     print(args)
 
     movies = [] #list of movies
+    years = [] #list of years
+    ratings = [] #list of ratings
 
     i = int(page) #convert page to integer
 
@@ -94,16 +110,23 @@ def movieList(page=0):
 
     #executing the query for the movie list (create a separate function later!!!)
     if(search):
-        for m in SQAsession.query(Movies).filter(Movies.title_movie.like("%"+search+"%")).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
-            movies.append(m.title_movie)
+        term = "%".join(search.split()) #searches in a more flexible way
+        for m in SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
+            movies.append(m[0])
+            years.append(m[1])
+            ratings.append(round(m[2],1))
     else:
-        for m in SQAsession.query(Movies).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
-            movies.append(m.title_movie)
+        for m in SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(Movies.id_movie)[lsize*i:lsize+lsize*i]:
+            movies.append(m[0])
+            years.append(m[1])
+            ratings.append(round(m[2],1))
 
     next=url_for('.movieList', page=i+1, lsize=lsize,searchBar=search, reset='no')
     previous=url_for('.movieList', page=i-1,lsize=lsize,searchBar=search, reset='no')
 
+    movies=zip(movies, years, ratings) #put all information into one variable for the template
+
     return render_template('movieList.html', movielist=movies, previous=previous, next=next, max=100)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000,debug=True)

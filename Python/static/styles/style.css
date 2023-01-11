@@ -52,6 +52,14 @@ ul {
   }
   tr:nth-child(even) {background-color: #f2f2f2;}
 
+  .bigColumn{
+    width: 50%;
+  }
+
+  .smallColumn{
+    width: 25%;
+  }
+
   .important{
     margin:auto;
     text-align: center;
@@ -72,6 +80,13 @@ ul {
     display: inline-block;
     font-size: 16px;
     margin: auto;
+  }
+
+  .markedStar{
+    color: orange;
+  }
+  .unmarkedStar{
+    color: grey
   }
 
 

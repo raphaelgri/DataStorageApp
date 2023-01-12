@@ -19,6 +19,12 @@ create table genre_list (
 CREATE TABLE reference_ratings (
 	id_reference INTEGER NOT NULL,
 	average_rating REAL NOT NULL,
-	timestamp_update TEXT NOT NULL
+	timestamp_update TEXT NOT NULL,
+	onestar_rating INTEGER NOT NULL,
+	twostar_rating INTEGER NOT NULL,
+	threestar_rating INTEGER NOT NULL,
+	fourstar_rating INTEGER NOT NULL,
+	fivestar_rating INTEGER NOT NULL,
+	count_rating INTEGER NOT NULL
 );
 CREATE INDEX reference_ratings_id_reference_IDX ON reference_ratings (id_reference);

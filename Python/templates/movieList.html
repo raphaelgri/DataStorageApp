@@ -15,7 +15,7 @@
         <th>Year of release</th>
         <th>Rating</th>
       </tr>
-    {% for movie, year, rating in movielist %}
+    {% for movie, year, rating, count in movielist %}
       <tr>
         <td class="bigColumn">{{ movie }}</td>
         {% if year != -1 %}
@@ -62,6 +62,7 @@
             <span class="unmarkedStar">&#9733;</span>
             <span class="unmarkedStar">&#9733;</span>
           {% endif %}
+          <span>({{ count }})</span>
         </td>
       </tr>
     {% endfor %}

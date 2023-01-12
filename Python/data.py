@@ -56,10 +56,18 @@ class ReferenceRatings(Base):
     id_reference = sqa.Column(sqa.Integer, primary_key=True)
     average_rating = sqa.Column(sqa.Float)
     timestamp_update = sqa.Column(sqa.String)
+    onestar_rating = sqa.Column(sqa.Integer)
+    twostar_rating = sqa.Column(sqa.Integer)
+    threestar_rating = sqa.Column(sqa.Integer)
+    fourstar_rating = sqa.Column(sqa.Integer)
+    fivestar_rating = sqa.Column(sqa.Integer)
+    count_rating = sqa.Column(sqa.Integer)
+    
 
     
     def __repr__(self):
         return "<Rating(id_movie='%i',average_rating='%i',timestamp_update='%s')>" % (self.id_movie,self.average_rating, self.timestamp_update)
+
 
 def dataSession():
     Session = sessionmaker(bind=engine) #session for SQAlchemy

@@ -78,6 +78,7 @@ def movieList(page=0):
     movies = [] #list of movies
     years = [] #list of years
     ratings = [] #list of ratings
+    counts = [] #list of rating count
 
     i = int(page) #convert page to integer
 
@@ -85,18 +86,20 @@ def movieList(page=0):
     with dataSession() as SQAsession:
         if(search):
             term = "%".join(search.split()) #searches in a more flexible way
-            for m in SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]:
+            for m in SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating, ReferenceRatings.count_rating).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]:
                 movies.append(m[0])
                 years.append(m[1])
                 ratings.append(round(m[2],1))
+                counts.append(m[3])
         else:
-            for m in SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]:
+            for m in SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating, ReferenceRatings.count_rating).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]:
                 movies.append(m[0])
                 years.append(m[1])
                 ratings.append(round(m[2],1))
+                counts.append(m[3])
 
     len_list = len(movies)
-    movies=zip(movies, years, ratings) #put all information into one variable for the template
+    movies=zip(movies, years, ratings, counts) #put all information into one variable for the template
 
     #view rendering
 

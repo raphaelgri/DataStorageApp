@@ -34,6 +34,7 @@
     margin: auto;
     width: 80%;
     padding: 5px;
+    align-items: stretch;
   }
 
   .SearchBar {
@@ -45,6 +46,7 @@
     background-repeat: no-repeat;
     background-size: contain;
     background-position: right;
+    
   }
 
   .resultTable{
@@ -112,6 +114,7 @@
     color: white;
     text-align: center;
     padding: auto;
+    position: fixed;
   }
 
   /* W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes */

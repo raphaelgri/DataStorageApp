@@ -17,13 +17,31 @@
         {% block PageTitle %}
         {% endblock %}
         <div class="SearchArea">
-            <form>
-                <select name="lsize" id="lsize" class="NavButton" aria-placeholder="Result Size">\n
+            <form class="SearchArea">
+                <select name="lsize" id="lsize" class="NavButton">\n
+                    <option value="10">Show</option>\n
                     <option value="10">10</option>\n
                     <option value="25">25</option>\n
                     <option value="50">50</option>\n
                     <option value="100">100</option>\n
                 </select>
+                <select name="orderby" id="orderby" class="NavButton">\n
+                    <option value="id">Order By</option>\n
+                    <option value="title">Title</option>\n
+                    <option value="year">Year</option>\n
+                    <option value="rating">Rating</option>\n
+                </select>
+                <select name="descasc" id="descasc" class="NavButton">\n
+                    <option value="desc">Descending</option>\n
+                    <option value="asc">Ascending</option>\n
+                </select>
+                <select name="genre" id="genre" class="NavButton">\n
+                    <option value="all">Genre</option>\n
+                    {% for genre in genreList %}
+                        <option value="{{ genre }}">{{ genre }}</option>\n
+                    {% endfor %}
+                </select>
+                <br>
                 <input type="text" placeholder="Search.." name="searchBar" class="SearchBar" id="searchBar">
                 <input type="submit" value="Search" class="NavButton">
             </form>

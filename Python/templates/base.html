@@ -42,7 +42,11 @@
                     {% endfor %}
                 </select>
                 <br>
-                <input type="text" placeholder="Search.." name="searchBar" class="SearchBar" id="searchBar">
+                {% if search == "" %}
+                    <input type="text" placeholder="Search.." name="searchBar" class="SearchBar" id="searchBar">
+                {% else %}
+                    <input type="text" name="searchBar" class="SearchBar" id="searchBar" value="{{search}}">
+                {% endif %}    
                 <input type="submit" value="Search" class="NavButton">
             </form>
         </div>

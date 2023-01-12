@@ -50,6 +50,7 @@ def movieList(page=0):
     lsize=10 #list of elements per page
     ordercolumn='id'
     descasc='desc'
+    genre='all'
 
     #request processing
     args = request.args
@@ -64,8 +65,11 @@ def movieList(page=0):
         reset = request.args.get("reset")
         ordercolumn = request.args.get("orderby") # what will be used to order
         descasc = request.args.get("descasc") # what will be used to order
+        genre = request.args.get("genre") #what genre will be used to filter
+        if(genre is None):
+            genre='all'
         if(reset is None): #reset page in case of new search
-            return redirect(url_for('.movieList', page=0, lsize=lsize,searchBar=search, reset='no', orderby=ordercolumn, descasc=descasc))
+            return redirect(url_for('.movieList', page=0, lsize=lsize,searchBar=search, reset='no', orderby=ordercolumn, descasc=descasc, genre=genre))
     
     if(descasc == 'desc'):
         order_value = orderdict[ordercolumn].desc()
@@ -84,19 +88,24 @@ def movieList(page=0):
 
     #executing the query for the movie list (create a separate function later!!!)
     with dataSession() as SQAsession:
-        if(search):
-            term = "%".join(search.split()) #searches in a more flexible way
-            for m in SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating, ReferenceRatings.count_rating).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]:
-                movies.append(m[0])
-                years.append(m[1])
-                ratings.append(round(m[2],1))
-                counts.append(m[3])
+        if(genre =='all'):
+            if(search):
+                term = "%".join(search.split()) #searches in a more flexible way
+                query = SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating, ReferenceRatings.count_rating).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]
+            else:
+                query = SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating, ReferenceRatings.count_rating).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]
         else:
-            for m in SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating, ReferenceRatings.count_rating).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]:
-                movies.append(m[0])
-                years.append(m[1])
-                ratings.append(round(m[2],1))
-                counts.append(m[3])
+            if(search):
+                term = "%".join(search.split()) #searches in a more flexible way
+                query = SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating, ReferenceRatings.count_rating, GenreList.id_movie, GenreList.name_genre).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference, Movies.id_movie == GenreList.id_movie, GenreList.name_genre == genre).order_by(order_value)[lsize*i:lsize+lsize*i]
+            else:
+                query = SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating, ReferenceRatings.count_rating, GenreList.id_movie, GenreList.name_genre).filter(Movies.id_movie == ReferenceRatings.id_reference, Movies.id_movie == GenreList.id_movie, GenreList.name_genre == genre).order_by(order_value)[lsize*i:lsize+lsize*i]
+
+        for m in query:
+            movies.append(m[0])
+            years.append(m[1])
+            ratings.append(round(m[2],1))
+            counts.append(m[3])
 
     len_list = len(movies)
     movies=zip(movies, years, ratings, counts) #put all information into one variable for the template
@@ -111,7 +120,7 @@ def movieList(page=0):
     else:
         maxflag=0 #limits navigation in the list
 
-    return render_template('movieList.html', movielist=movies, previous=previous, next=next, max=maxflag, page=i,genreList=glist)
+    return render_template('movieList.html', movielist=movies, previous=previous, next=next, max=maxflag, page=i,genreList=glist,search=search)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000,debug=True)

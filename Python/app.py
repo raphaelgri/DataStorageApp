@@ -83,6 +83,7 @@ def movieList(page=0):
     years = [] #list of years
     ratings = [] #list of ratings
     counts = [] #list of rating count
+    idms = [] #list of movie ids
 
     i = int(page) #convert page to integer
 
@@ -91,9 +92,9 @@ def movieList(page=0):
         if(genre =='all'):
             if(search):
                 term = "%".join(search.split()) #searches in a more flexible way
-                query = SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating, ReferenceRatings.count_rating).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]
+                query = SQAsession.query(Movies.title_movie, Movies.year_movie, ReferenceRatings.average_rating, ReferenceRatings.count_rating, Movies.id_movie).filter(Movies.title_movie.like("%"+term+"%")).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]
             else:
-                query = SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating, ReferenceRatings.count_rating).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]
+                query = SQAsession.query(Movies.title_movie, Movies.year_movie,ReferenceRatings.average_rating, ReferenceRatings.count_rating, Movies.id_movie).filter(Movies.id_movie == ReferenceRatings.id_reference).order_by(order_value)[lsize*i:lsize+lsize*i]
         else:
             if(search):
                 term = "%".join(search.split()) #searches in a more flexible way
@@ -106,9 +107,10 @@ def movieList(page=0):
             years.append(m[1])
             ratings.append(round(m[2],1))
             counts.append(m[3])
+            idms.append(m[4])
 
     len_list = len(movies)
-    movies=zip(movies, years, ratings, counts) #put all information into one variable for the template
+    movies=zip(movies, years, ratings, counts,idms) #put all information into one variable for the template
 
     #view rendering
 
@@ -121,6 +123,61 @@ def movieList(page=0):
         maxflag=0 #limits navigation in the list
 
     return render_template('movieList.html', movielist=movies, previous=previous, next=next, max=maxflag, page=i,genreList=glist,search=search)
+
+@app.route("/MovieDB.io/moviePage/<movieid>", methods=['GET', 'POST'])
+def moviePage(movieid=0):
+
+    averages = []
+    counts = []
+    ones = []
+    twos = []
+    threes = []
+    fours = []
+    fives = []
+
+    #query for movie information
+    with dataSession() as SQAsession:
+        query = SQAsession.query(ReferenceRatings.id_reference,
+                         ReferenceRatings.average_rating, 
+                         ReferenceRatings.count_rating, 
+                         ReferenceRatings.onestar_rating, 
+                         ReferenceRatings.twostar_rating,
+                         ReferenceRatings.threestar_rating,
+                         ReferenceRatings.fourstar_rating,
+                         ReferenceRatings.fivestar_rating).filter(ReferenceRatings.id_reference == movieid)
+        for q in query:
+            averages = round(q[1],1)
+            counts = q[2]
+            ones = q[3]
+            twos = q[4]
+            threes = q[5]
+            fours = q[6]
+            fives =q[7]
+      
+    with dataSession() as SQAsession:   
+        movieq = SQAsession.query(Movies).filter(Movies.id_movie == movieid)
+        
+        references = [averages, counts, ones, twos, threes, fours, fives]
+    print(references)
+
+    #create bars for rating counts
+    if(references[1] > 0):
+        bars = [".bar-5 {width: " + str(round((references[6] / references[1])*100)) + "%; height: 18px; background-color: #33cc33;}",
+                ".bar-4 {width: " + str(round((references[5] / references[1])*100)) + "%; height: 18px; background-color: #99ff33;}",
+                ".bar-3 {width: " + str(round((references[4] / references[1])*100)) + "%; height: 18px; background-color: #ffff00;}",
+                ".bar-2 {width: " + str(round((references[3] / references[1])*100)) + "%; height: 18px; background-color: #ff9933;}",
+                ".bar-1 {width: " + str(round((references[2] / references[1])*100)) + "%; height: 18px; background-color: #ff0000;}"]
+    else:
+                bars = [".bar-5 {width: " + str(0) + "%; height: 18px; background-color: #33cc33;}",
+                        ".bar-4 {width: " + str(0) + "%; height: 18px; background-color:  #99ff33;}",
+                        ".bar-3 {width: " + str(0) + "%; height: 18px; background-color:  #ffff00;}",
+                        ".bar-2 {width: " + str(0) + "%; height: 18px; background-color:  #ff9933;}",
+                        ".bar-1 {width: " + str(0) + "%; height: 18px; background-color:  #ff0000;}"]
+    st = "<style>"
+    cst = "</style>"
+
+
+    return render_template('moviePage.html', movieid=movieid, references=references, title=movieq[0].title_movie, bars=bars, styletag=st, closestyletag=cst)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000,debug=True)

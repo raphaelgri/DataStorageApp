@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Movie Page{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block PageTitle %}<h1>Movie Page {{ title }}</h1>{% endblock %}
+{% block content %}
+    <h1>MovieDB.io</h1>
+    <p class="important">
+      Welcome to MovieDB.io
+    </p>
+    {{ styletag|safe }}
+        {% for bar in bars %}
+            {{ bar|safe }}
+        {% endfor %}
+    {{ closestyletag|safe }}
+    <div class="userRatings">
+        <div clas="ratingstars">
+            <span class="heading">User Rating</span>
+                {% if references[0] >= 5 %}
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                {% elif references[0] >= 4 %}
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                {% elif references[0] >= 3 %}
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                {% elif references[0] >= 2 %}
+                    <span class="markedStar">&#9733;</span>
+                    <span class="markedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                {% elif references[0] >= 1 %}
+                    <span class="markedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                {% else %}
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                    <span class="unmarkedStar">&#9733;</span>
+                {% endif %}
+            </div>
+            <br>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <p>{{ references[0] }} average based on {{ references[1] }} reviews.</p>
+        <hr style="border:3px solid #f1f1f1">
+        
+        {% if references[1] > 0 %}
+            <div class="row">
+            <div class="side">
+                <div>5 star</div>
+            </div>
+            <div class="middle">
+                <div class="bar-container">
+                <div class="bar-5"></div>
+                </div>
+            </div>
+            <div class="side right">
+                <div>{{ references[6] }}</div>
+            </div>
+            <div class="side">
+                <div>4 star</div>
+            </div>
+            <div class="middle">
+                <div class="bar-container">
+                <div class="bar-4"></div>
+                </div>
+            </div>
+            <div class="side right">
+                <div>{{ references[5] }}</div>
+            </div>
+            <div class="side">
+                <div>3 star</div>
+            </div>
+            <div class="middle">
+                <div class="bar-container">
+                <div class="bar-3"></div>
+                </div>
+            </div>
+            <div class="side right">
+                <div>{{ references[4] }}</div>
+            </div>
+            <div class="side">
+                <div>2 star</div>
+            </div>
+            <div class="middle">
+                <div class="bar-container">
+                <div class="bar-2"></div>
+                </div>
+            </div>
+            <div class="side right">
+                <div>{{ references[3] }}</div>
+            </div>
+            <div class="side">
+                <div>1 star</div>
+            </div>
+            <div class="middle">
+                <div class="bar-container">
+                <div class="bar-1"></div>
+                </div>
+            </div>
+            <div class="side right">
+                <div>{{ references[2] }}</div>
+            </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+

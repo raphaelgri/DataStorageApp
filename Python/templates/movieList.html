@@ -15,9 +15,9 @@
         <th>Year of release</th>
         <th>Rating</th>
       </tr>
-    {% for movie, year, rating, count in movielist %}
+    {% for movie, year, rating, count, movieid in movielist %}
       <tr>
-        <td class="bigColumn">{{ movie }}</td>
+        <td class="bigColumn"><a href="/MovieDB.io/moviePage/{{movieid}}">{{ movie }}</a></td>
         {% if year != -1 %}
           <td class="smallColumn">{{ year }}</td>
         {% else %}

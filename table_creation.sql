@@ -27,4 +27,12 @@ CREATE TABLE reference_ratings (
 	fivestar_rating INTEGER NOT NULL,
 	count_rating INTEGER NOT NULL
 );
-CREATE INDEX reference_ratings_id_reference_IDX ON reference_ratings (id_reference);
+CREATE INDEX reference_ratings_id_reference_IDX ON reference_ratings (id_reference);]
+
+CREATE TABLE intersec_movies (
+	id_intersec INTEGER NOT NULL,
+	id_movieA INTEGER NOT NULL,
+	id_movieB INTEGER NOT NULL,
+	count_value INTEGER NOT NULL
+);
+CREATE INDEX intersec_movies_id_movieA_IDX ON intersec_movies (id_movieA,id_movieB);

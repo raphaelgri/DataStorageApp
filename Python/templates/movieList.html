@@ -71,6 +71,17 @@
         {% if page > 0 %}
           <a href="{{previous}}" class="NavButton"> Previous Page </a>
         {% endif %}
+
+        {% for link, index in pageitems %}
+          {% if index == page %}
+            <b>
+          {% endif %}
+          <a href="{{link}}" class="NavButton"> {{ index }} </a>
+          {% if index == page %}   
+            </b>
+          {% endif %}
+        {% endfor %}
+        
         {% if max == 0 %}
           <a href="{{next}}" class="NavButton"> Next Page </a>
         {% endif %}

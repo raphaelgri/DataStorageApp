@@ -68,6 +68,18 @@ class ReferenceRatings(Base):
     def __repr__(self):
         return "<Rating(id_movie='%i',average_rating='%i',timestamp_update='%s')>" % (self.id_movie,self.average_rating, self.timestamp_update)
 
+class intersec_movies(Base):
+    __tablename__ = 'intersec_movies'
+    
+    id_intersec = sqa.Column(sqa.Integer, primary_key=True, index=True)
+    id_movieA = sqa.Column(sqa.Integer)
+    id_movieB = sqa.Column(sqa.Integer)
+    count_value = sqa.Column(sqa.Integer)
+    
+    def __repr__(self):
+        return "<intersec_movies(id_moviAe='%i',id_moviAe='%i',count='%i')>" % (self.id_movieA,self.id_movieB, self.count_value)
+
+
 
 def dataSession():
     Session = sessionmaker(bind=engine) #session for SQAlchemy

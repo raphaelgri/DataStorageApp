@@ -121,5 +121,10 @@
             </div>
         </div>
     {% endif %}
+
+    {% for movie, title in recommended %}
+        <p><a href="/MovieDB.io/moviePage/{{movie}}">{{title}}</a></p>
+    {% endfor %}
+
 {% endblock %}
 

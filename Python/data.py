@@ -85,7 +85,7 @@ class intersec_movies_2(Base):
     id_intersec_movie = sqa.Column(sqa.Integer, primary_key=True, index=True)
     id_movieA = sqa.Column(sqa.Integer, index=True)
     id_movieB = sqa.Column(sqa.Integer, index=True)
-    similarity_movie = sqa.Column(sqa.Integer)
+    similarity_movie = sqa.Column(sqa.Float)
     
     def __repr__(self):
         return "<intersec_movies(id_intersec_movie='%i',id_movieA='%i',id_movieB='%i', similarity='%i')>" % (self.id_intersec_movie,self.id_movieA,self.id_movieB, self.similarity_movie)

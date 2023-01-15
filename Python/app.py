@@ -228,17 +228,17 @@ def moviePage(movieid=0):
     list_count = []
 
     with dataSession() as SQAsession:
-        intersecA = SQAsession.query(intersec_movies).filter(intersec_movies.id_movieA == movieid)
+        intersecA = SQAsession.query(intersec_movies_2).filter(intersec_movies_2.id_movieA == movieid)
         for row in intersecA:
             list_movies.append(row.id_movieB)
-            list_count.append(row.count_value)
+            list_count.append(row.similarity_movie)
 
 
     with dataSession() as SQAsession:
-        intersecB = SQAsession.query(intersec_movies).filter(intersec_movies.id_movieB == movieid)
+        intersecB = SQAsession.query(intersec_movies_2).filter(intersec_movies_2.id_movieB == movieid)
         for row in intersecB:
             list_movies.append(row.id_movieA)
-            list_count.append(row.count_value)
+            list_count.append(row.similarity_movie)
 
     list_movies = np.asarray(list_movies)
     list_count = np.asarray(list_count)

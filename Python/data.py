@@ -79,7 +79,16 @@ class intersec_movies(Base):
     def __repr__(self):
         return "<intersec_movies(id_moviAe='%i',id_moviAe='%i',count='%i')>" % (self.id_movieA,self.id_movieB, self.count_value)
 
-
+class intersec_movies_2(Base):
+    __tablename__ = 'intersec_movies_2'
+    
+    id_intersec_movie = sqa.Column(sqa.Integer, primary_key=True, index=True)
+    id_movieA = sqa.Column(sqa.Integer, index=True)
+    id_movieB = sqa.Column(sqa.Integer, index=True)
+    similarity_movie = sqa.Column(sqa.Integer)
+    
+    def __repr__(self):
+        return "<intersec_movies(id_intersec_movie='%i',id_movieA='%i',id_movieB='%i', similarity='%i')>" % (self.id_intersec_movie,self.id_movieA,self.id_movieB, self.similarity_movie)
 
 def dataSession():
     Session = sessionmaker(bind=engine) #session for SQAlchemy

@@ -8,10 +8,10 @@ This project was built using python and flask for generating a user interface. T
 ### Navigation
 
 The project allows the user to list movies, rank them according to: id, year, rating and title. It is also possible to filter the Genre of the movie and obtain the best rated movies of each genre. In all pages it is possible to search for a specific movie title and filter the results. There are four possible pages a user can access:
--Home
--Movie List
--Movie Page
--User Page
+- Home
+- Movie List
+- Movie Page
+- User Page
 
 #### Home
 Contains only the basic elements, allowing the user to navigate the application.
@@ -28,13 +28,13 @@ An individual page generated for each user, contains a list with the movies the 
 ## Database
 
 The database is built using the table_creating.sql script and contains 7 different tables. The database is the file Data/movie.db available [here](https://1drv.ms/u/s!AkuZVmKUlu2HjaN5dOuWKIkRKYtqlA?e=rjDycO) or [here]
--Movies
--Ratings
--Genre_List
--Reference_ratings *
--Intersec_users *
--Intersec_movies *
--Intersec_movies_2 *
+- Movies
+- Ratings
+- Genre_List
+- Reference_ratings *
+- Intersec_users *
+- Intersec_movies *
+- Intersec_movies_2 *
 
 *Those tables are only references to speed up the application and are to be updated by the scripts on a regular basis.
 

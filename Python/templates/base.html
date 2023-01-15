@@ -14,8 +14,10 @@
         <li><a href="/MovieDB.io/userList">User List</a></li>
     </ul>
     <div id="content">
-        {% block PageTitle %}
-        {% endblock %}
+        <h1>MovieDB.io</h1>
+        <p class="important">
+          Welcome to MovieDB.io
+        </p>
         <div class="SearchArea">
             <form class="SearchArea">
                 <select name="lsize" id="lsize" class="NavButton">\n
@@ -50,6 +52,8 @@
                 <input type="submit" value="Search" class="NavButton">
             </form>
         </div>
+        {% block PageTitle %}
+        {% endblock %}
         {% block content %}
         {% endblock %}
     </div>
@@ -57,7 +61,7 @@
 
 <div id="footer" class="footer">
     {% block footer %}
-    &copy; Copyright 2008 by<a href="http://domain.invalid/">Raphael Griffo Duarte</a>.
+    &copy; Copyright 2008 by<a href="https://github.com/raphaelgri/">Raphael Griffo Duarte</a>.
     {% endblock %}
 </div>
 

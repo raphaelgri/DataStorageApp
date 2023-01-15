@@ -5,85 +5,81 @@
 {% endblock %}
 {% block PageTitle %}<h1>Movie List</h1>{% endblock %}
 {% block content %}
-    <h1>MovieDB.io</h1>
-    <p class="important">
-      Welcome to MovieDB.io
-    </p>
-    <table class="resultTable">
-      <tr>
-        <th>Movie Title</th>
-        <th>Year of release</th>
-        <th>Rating</th>
-      </tr>
-    {% for movie, year, rating, count, movieid in movielist %}
-      <tr>
-        <td class="bigColumn"><a href="/MovieDB.io/moviePage/{{movieid}}">{{ movie }}</a></td>
-        {% if year != -1 %}
-          <td class="smallColumn">{{ year }}</td>
+  <table class="resultTable">
+    <tr>
+      <th>Movie Title</th>
+      <th>Year of release</th>
+      <th>Rating</th>
+    </tr>
+  {% for movie, year, rating, count, movieid in movielist %}
+    <tr>
+      <td class="bigColumn"><a href="/MovieDB.io/moviePage/{{movieid}}">{{ movie }}</a></td>
+      {% if year != -1 %}
+        <td class="smallColumn">{{ year }}</td>
+      {% else %}
+        <td class="smallColumn">Unkown Year</td>
+      {% endif %}
+      <td class="smallColumn">
+        {{ rating }}
+        {% if rating >= 5 %}
+            <span class="markedStar">&#9733;</span>
+            <span class="markedStar">&#9733;</span>
+            <span class="markedStar">&#9733;</span>
+            <span class="markedStar">&#9733;</span>
+            <span class="markedStar">&#9733;</span>
+        {% elif rating >= 4 %}
+          <span class="markedStar">&#9733;</span>
+          <span class="markedStar">&#9733;</span>
+          <span class="markedStar">&#9733;</span>
+          <span class="markedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+        {% elif rating >= 3 %}
+          <span class="markedStar">&#9733;</span>
+          <span class="markedStar">&#9733;</span>
+          <span class="markedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+        {% elif rating >= 2 %}
+          <span class="markedStar">&#9733;</span>
+          <span class="markedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+        {% elif rating >= 1 %}
+          <span class="markedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
         {% else %}
-          <td class="smallColumn">Unkown Year</td>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
+          <span class="unmarkedStar">&#9733;</span>
         {% endif %}
-        <td class="smallColumn">
-          {{ rating }}
-          {% if rating >= 5 %}
-              <span class="markedStar">&#9733;</span>
-              <span class="markedStar">&#9733;</span>
-              <span class="markedStar">&#9733;</span>
-              <span class="markedStar">&#9733;</span>
-              <span class="markedStar">&#9733;</span>
-          {% elif rating >= 4 %}
-            <span class="markedStar">&#9733;</span>
-            <span class="markedStar">&#9733;</span>
-            <span class="markedStar">&#9733;</span>
-            <span class="markedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-          {% elif rating >= 3 %}
-            <span class="markedStar">&#9733;</span>
-            <span class="markedStar">&#9733;</span>
-            <span class="markedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-          {% elif rating >= 2 %}
-            <span class="markedStar">&#9733;</span>
-            <span class="markedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-          {% elif rating >= 1 %}
-            <span class="markedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-          {% else %}
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-            <span class="unmarkedStar">&#9733;</span>
-          {% endif %}
-          <span>({{ count }})</span>
-        </td>
-      </tr>
-    {% endfor %}
-    </table>
-    <div class="PageNavigation">
-        {% if page > 0 %}
-          <a href="{{previous}}" class="NavButton"> Previous Page </a>
-        {% endif %}
+        <span>({{ count }})</span>
+      </td>
+    </tr>
+  {% endfor %}
+  </table>
+  <div class="PageNavigation">
+      {% if page > 0 %}
+        <a href="{{previous}}" class="NavButton"> Previous Page </a>
+      {% endif %}
 
-        {% for link, index in pageitems %}
-          {% if index == page %}
-            <b>
-          {% endif %}
-          <a href="{{link}}" class="NavButton"> {{ index }} </a>
-          {% if index == page %}   
-            </b>
-          {% endif %}
-        {% endfor %}
-        
-        {% if max == 0 %}
-          <a href="{{next}}" class="NavButton"> Next Page </a>
+      {% for link, index in pageitems %}
+        {% if index == page %}
+          <b>
         {% endif %}
-    </div>
+        <a href="{{link}}" class="NavButton"> {{ index }} </a>
+        {% if index == page %}   
+          </b>
+        {% endif %}
+      {% endfor %}
+      
+      {% if max == 0 %}
+        <a href="{{next}}" class="NavButton"> Next Page </a>
+      {% endif %}
+  </div>
 {% endblock %}

@@ -3,12 +3,8 @@
 {% block head %}
     {{ super() }}
 {% endblock %}
-{% block PageTitle %}<h1>Movie Page {{ title }}</h1>{% endblock %}
+{% block PageTitle %}<h1>{{ title }}</h1>{% endblock %}
 {% block content %}
-    <h1>MovieDB.io</h1>
-    <p class="important">
-      Welcome to MovieDB.io
-    </p>
     {{ styletag|safe }}
         {% for bar in bars %}
             {{ bar|safe }}

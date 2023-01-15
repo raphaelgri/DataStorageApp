@@ -32,6 +32,7 @@ def home():
     else:
         glist = session['GenreList']
 
+    #search area
     search="" #search term
     lsize=10 #list of elements per page
     ordercolumn='id'
@@ -170,6 +171,42 @@ def movieList(page=0):
 
 @app.route("/MovieDB.io/moviePage/<movieid>", methods=['GET', 'POST'])
 def moviePage(movieid=0):
+    #initialize default variables
+    glist = []
+    #check if session values are already generated
+    if not session.get("GenreList"):
+        with dataSession() as SQAsession:
+            glist = [m[0].strip('\n') for m in (SQAsession.query(GenreList.name_genre.distinct()))]
+            session['GenreList'] = glist
+    else:
+        glist = session['GenreList']
+
+
+    #search area
+    search="" #search term
+    lsize=10 #list of elements per page
+    ordercolumn='id'
+    descasc='desc'
+    genre='all'
+
+    #request processing
+    args = request.args
+    orderdict = {   "id" : Movies.id_movie,
+                    "title" : Movies.title_movie,
+                    "year" : Movies.year_movie,
+                    "rating" : ReferenceRatings.average_rating}
+    
+    if(args):
+        lsize = int(request.args['lsize'])
+        search = request.args['searchBar']
+        reset = request.args.get("reset")
+        ordercolumn = request.args.get("orderby") # what will be used to order
+        descasc = request.args.get("descasc") # what will be used to order
+        genre = request.args.get("genre") #what genre will be used to filter
+        if(genre is None):
+            genre='all'
+        if(reset is None): #reset page in case of new search
+            return redirect(url_for('.movieList', page=0, lsize=lsize,searchBar=search, reset='no', orderby=ordercolumn, descasc=descasc, genre=genre))
 
     averages = []
     counts = []
@@ -248,15 +285,15 @@ def moviePage(movieid=0):
 
     list_titles = []
 
-    for k in range(0,5):
+    for k in range(0,min(5, len(list_movies))):
         with dataSession() as SQAsession:
             query = SQAsession.query(Movies.title_movie).filter(Movies.id_movie == int(list_movies[k])).all()
             list_titles.append(query[0][0])
 
-    list_recommend = zip(list_movies[0:5], list_titles)
+    list_recommend = zip(list_movies[0:min(5, len(list_movies))], list_titles)
 
 
-    return render_template('moviePage.html', movieid=movieid, references=references, title=movieq[0].title_movie, bars=bars, styletag=st, closestyletag=cst, recommended=list_recommend)
+    return render_template('moviePage.html', movieid=movieid, references=references, title=movieq[0].title_movie, bars=bars, styletag=st, closestyletag=cst, recommended=list_recommend, GenreList=glist)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000,debug=True)

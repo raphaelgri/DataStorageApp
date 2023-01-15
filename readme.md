@@ -91,6 +91,18 @@ To run this application, it is required first to have flask installed. Then, sim
 
 ## References
 
-https://www.geeksforgeeks.org/visualize-graphs-in-python/
-https://networkx.org/documentation/stable/tutorial.html
-https://gephi.org/
+- Visualization https://www.geeksforgeeks.org/visualize-graphs-in-python/
+- Networkx tutorial https://networkx.org/documentation/stable/tutorial.html
+- Visualization of graphs https://gephi.org/
+- Grid layout css https://www.w3schools.com/css/css_grid.asp
+- jinja2 Documentation https://jinja.palletsprojects.com/en/3.1.x/
+- Stylesheet https://www.w3schools.com/html/html_css.asp
+- Recommendation system concepts https://en.wikipedia.org/wiki/Recommender_system
+- Recommendation system concepts https://towardsdatascience.com/introduction-to-recommender-systems-6c66cf15ada
+- SQLalchemy documentation https://docs.sqlalchemy.org/en/14/orm/query.html
+- SQLalchemy func https://www.geeksforgeeks.org/python-sqlalchemy-func-count-with-filter/
+- Flask sessions https://testdriven.io/blog/flask-sessions/
+- Search bar html / css https://www.w3schools.com/howto/howto_css_searchbar.asp
+- Fixing thread bugs https://ricardoanderegg.com/posts/python-sqlite-thread-safety/
+- Star rating https://www.w3schools.com/howto/howto_css_star_rating.asp
+- Scorecard https://www.w3schools.com/howto/howto_css_user_rating.asp

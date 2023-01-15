@@ -353,72 +353,76 @@ def userPage(userid=1):
         
     liked_list = zip(liked[:25],liked_ratings[:25],liked_titles[:25])
 
-    #generate recommendations
+    if(len(liked)>0): #only generate if user has rated a movie before
+        #generate recommendations
 
-    #get the most similar users
-    list_users = []
-    list_sim = []
+        #get the most similar users
+        list_users = []
+        list_sim = []
 
-    with dataSession() as SQAsession:
-        intersecA = SQAsession.query(intersec_users).filter(intersec_users.id_userA == userid)
-        for row in intersecA:
-            list_users.append(row.id_userB)
-            list_sim.append(row.similarity_user)
+        with dataSession() as SQAsession:
+            intersecA = SQAsession.query(intersec_users).filter(intersec_users.id_userA == userid)
+            for row in intersecA:
+                list_users.append(row.id_userB)
+                list_sim.append(row.similarity_user)
 
-    with dataSession() as SQAsession:
-        intersecB = SQAsession.query(intersec_users).filter(intersec_users.id_userB == userid)
-        for row in intersecB:
-            list_users.append(row.id_userA)
-            list_sim.append(row.similarity_user)
-        
-    list_users = np.asarray(list_users)
-    list_count = np.asarray(list_sim)
+        with dataSession() as SQAsession:
+            intersecB = SQAsession.query(intersec_users).filter(intersec_users.id_userB == userid)
+            for row in intersecB:
+                list_users.append(row.id_userA)
+                list_sim.append(row.similarity_user)
+            
+        list_users = np.asarray(list_users)
+        list_sim = np.asarray(list_sim)
 
-    list_users = np.flip(list_users[np.argsort(list_sim)])
-    list_sim = np.flip(np.sort(list_sim))
+        list_users = np.flip(list_users[np.argsort(list_sim)])
+        list_sim = np.flip(np.sort(list_sim))
 
-    #get the 3 most similar users
+        if(len(list_users) >= 3):
+            #get the 3 most similar users
 
-    #create lists of movies
-    rlist_1 = []
-    rlist_2 = []
-    rlist_3 = []
-    ulist = []
-    with dataSession() as SQAsession:
-        recommend_1 = SQAsession.query(Ratings.id_movie).filter(Ratings.id_user.in_((int(list_users[0]),int(list_users[1]),int(list_users[2]))), Ratings.value_rating >= 3.5).all()
-        #get all the movies the user rated
-        userrated = SQAsession.query(Ratings.id_movie).filter(Ratings.id_user == 100260).all()
+            #create lists of movies
+            rlist_1 = []
+            ulist = []
+            with dataSession() as SQAsession:
+                recommend_1 = SQAsession.query(Ratings.id_movie).filter(Ratings.id_user.in_((int(list_users[0]),int(list_users[1]),int(list_users[2]))), Ratings.value_rating >= 3.5).all()
+                #get all the movies the user rated
+                userrated = SQAsession.query(Ratings.id_movie).filter(Ratings.id_user == 100260).all()
 
-        for r in recommend_1:
-            rlist_1.append(r[0])
+                for r in recommend_1:
+                    rlist_1.append(r[0])
 
-        for l in userrated:
-            ulist.append(l[0])
+                for l in userrated:
+                    ulist.append(l[0])
 
-    #create recommended set (Movies liked by similar users but not rated by this user)
-    recommended_set = set(rlist_1) - set(ulist)
+            #create recommended set (Movies liked by similar users but not rated by this user)
+            recommended_set = set(rlist_1) - set(ulist)
 
-    #now generate the list and order ir by rating
-    fullrlist = []
-    fullrlist_names = []
-    relevanceindex = []
-    with dataSession() as SQAsession:
-        for movie in recommended_set:
-            query = SQAsession.query(ReferenceRatings.average_rating).filter(ReferenceRatings.id_reference == movie)
-            query2 = SQAsession.query(Movies.title_movie).filter(Movies.id_movie == movie)
-            fullrlist.append(movie)
-            fullrlist_names.append(query2[0][0])
-            relevanceindex.append(query[0][0])
+            #now generate the list and order ir by rating
+            fullrlist = []
+            fullrlist_names = []
+            relevanceindex = []
+            with dataSession() as SQAsession:
+                for movie in recommended_set:
+                    query = SQAsession.query(ReferenceRatings.average_rating).filter(ReferenceRatings.id_reference == movie)
+                    query2 = SQAsession.query(Movies.title_movie).filter(Movies.id_movie == movie)
+                    fullrlist.append(movie)
+                    fullrlist_names.append(query2[0][0])
+                    relevanceindex.append(query[0][0])
 
-    fullrlist = np.asarray(fullrlist)
-    fullrlist_names = np.asarray(fullrlist_names)
-    relevanceindex = np.asarray(relevanceindex)
+            fullrlist = np.asarray(fullrlist)
+            fullrlist_names = np.asarray(fullrlist_names)
+            relevanceindex = np.asarray(relevanceindex)
 
-    fullrlist = np.flip(fullrlist[np.argsort(relevanceindex)])
-    fullrlist_names = np.flip(fullrlist_names[np.argsort(relevanceindex)])
-    relevanceindex = np.flip(np.sort(relevanceindex))
-    
-    recommended_list = zip(fullrlist[0:25], relevanceindex[0:25], fullrlist_names[0:25])
+            fullrlist = np.flip(fullrlist[np.argsort(relevanceindex)])
+            fullrlist_names = np.flip(fullrlist_names[np.argsort(relevanceindex)])
+            relevanceindex = np.flip(np.sort(relevanceindex))
+            
+            recommended_list = zip(fullrlist[0:25], relevanceindex[0:25], fullrlist_names[0:25])
+        else:
+            recommended_list = zip([],[],[])
+    else:
+        recommended_list = zip([],[],[])
 
     return render_template('userPage.html', user=userid, liked=liked_list, recommended=recommended_list, GenreList=glist)
 

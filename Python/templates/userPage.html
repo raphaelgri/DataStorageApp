@@ -5,36 +5,39 @@
 {% endblock %}
 {% block PageTitle %}<h1>Profile: {{ user }}</h1>{% endblock %}
 {% block content %}
-
-    <table class="resultTable">
-        <th>Liked Movies</th>
-        <th> Your Rating </th>    
-        {% for movie, rating, title in liked %}
-            <tr>
-                <td class="bigColumn">
-                    <a href="/MovieDB.io/moviePage/{{movie}}">{{title}}</a>
-                </td>
-                <td class="smallColumn">
-                    {{rating}}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-
-    <table class="resultTable">
-        <th>Recommended Movies</th>
-        <th> Average Rating </th>    
-        {% for movie, rating, title in recommended %}
-            <tr>
-                <td class="bigColumn">
-                    <a href="/MovieDB.io/moviePage/{{movie}}">{{title}}</a>
-                </td>
-                <td class="smallColumn">
-                    {{rating}}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-
+<div class="resultsGrid">
+    <div class="itemGrid">
+        <table class="resultTable">
+            <th>Liked Movies</th>
+            <th> Your Rating </th>    
+            {% for movie, rating, title in liked %}
+                <tr>
+                    <td class="bigColumn">
+                        <a href="/MovieDB.io/moviePage/{{movie}}">{{title}}</a>
+                    </td>
+                    <td class="smallColumn">
+                        {{rating}}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="itemGrid">
+        <table class="resultTable">
+            <th>Recommended Movies</th>
+            <th> Average Rating </th>    
+            {% for movie, rating, title in recommended %}
+                <tr>
+                    <td class="bigColumn">
+                        <a href="/MovieDB.io/moviePage/{{movie}}">{{title}}</a>
+                    </td>
+                    <td class="smallColumn">
+                        {{rating}}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
 {% endblock %}
 

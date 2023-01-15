@@ -27,7 +27,7 @@ An individual page generated for each user, contains a list with the movies the 
 
 ## Database
 
-The database is built using the table_creating.sql script and contains 7 different tables. The database is the file Data/movie.db available [here](https://1drv.ms/u/s!AkuZVmKUlu2HjaN5dOuWKIkRKYtqlA?e=rjDycO) or [here]
+The database is built using the table_creating.sql script and contains 7 different tables. The database is the file Data/movie.db available [here](https://1drv.ms/u/s!AkuZVmKUlu2HjaN5dOuWKIkRKYtqlA?e=rjDycO) or [here](https://drive.google.com/file/d/1bNFGR0jgy-o3Vqh1DIjpWAcQvRwiLHuV/view?usp=share_link)
 - Movies
 - Ratings
 - Genre_List
@@ -72,3 +72,25 @@ For users the same operation applies, but instead of creating groups of users, t
 
 After retrieving the most similar movies, simply show the ranked list ordered by the similarity.
 For the recomendation of movies to users, the order is given by the ratings of each movie.
+
+## Other files
+
+Other files inclue the LoadData, and ReadData notebooks, were some functions were tested and could be useful if modified.
+
+## Analysis
+
+I included also a notebook with some analysis on the graph structure of the similarities graph for the movies, it generates a .gexf file that can be read by Gephi to generate a visualization. The images generated are also included as outputs.
+
+## Choice of database
+
+SQLite was chosen simply due the my own familiarity with relational databases over NoSQL. During the project development in many situations it became clear that using a NoSQL database would be a better choice, specially when storing temporary data for example. In the case of movies, it could be a document and containt the most similar movies, that would improve the speed of the application considerably. The same applies for the user.
+
+## Running this application
+
+To run this application, it is required first to have flask installed. Then, simple run "flask --app app run" in the app.py directory. The database should be placed in Data folder as movie.db.
+
+## References
+
+https://www.geeksforgeeks.org/visualize-graphs-in-python/
+https://networkx.org/documentation/stable/tutorial.html
+https://gephi.org/

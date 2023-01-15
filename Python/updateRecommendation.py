@@ -178,5 +178,5 @@ def RecomendationAlphaFullUsers(session,threshold,buffersize):
 
     session.commit()
 
-RecomendationBetaFull(session, 1000, 1000000) #generates table for movie recommendation
+RecomendationBetaFull(dataSession(), 1000, 1000000) #generates table for movie recommendation
 RecomendationAlphaFullUsers(dataSession(), 250, 1000000) #generates table for user recommendation
